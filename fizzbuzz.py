@@ -1,8 +1,8 @@
 class Fizzbuzz:
     def __init__(self, n):
         self.string_list = []
-        self.size = n
-        self.index = 0
+        self.size = int(n)
+        self.index = int(0)
 
     def fizz(self):
         self.string_list.append("fizz")
