@@ -14,16 +14,10 @@ class FizzbuzzResult(BaseModel):
     size: int
     index: int
 
-@app.get("/")
-def read_root():
-    return{"message": "Hello, Foo!"}
-
-@app.post("/fizzbuzz", response_model = FizzbuzzResult)
-def fizzbuzz_runner(request: FizzbuzzRequest = Body(...)):
-    fb_instance = Fizzbuzz(request.size)
-    f, b = request.f, request.b
+def fizzbuzz_runner(size, f, b):
+    fb_instance = Fizzbuzz(size)
     multiplied = f * b
-    for i in range(request.size):
+    for i in range(size):
         if (fb_instance.index + 1) % multiplied == 0:
             fb_instance.fizzbuzz()
         elif (fb_instance.index + 1) % f == 0:
@@ -34,6 +28,19 @@ def fizzbuzz_runner(request: FizzbuzzRequest = Body(...)):
             fb_instance.number()
         fb_instance.index += 1
     return fb_instance
+
+@app.get("/")
+def fizzbuzz_base():
+    return{"message": "Hello, from FizzBuzz!"}
+
+@app.post("/fizzbuzz", response_model = FizzbuzzResult)
+def fizzbuzz_custom(request: FizzbuzzRequest = Body(...)):
+    return fizzbuzz_runner(request.size, request.f, request.b)
+
+
+@app.get("/fizzbuzz_example")
+def fizzbuzz_filled(size: int = 15, f: int = 2, b: int = 3):
+    return fizzbuzz_runner(size, f, b)
 
 
 
