@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, Body, HTTPException
 from fizzbuzz import Fizzbuzz
 from pydantic import BaseModel, Field
 
@@ -15,6 +15,8 @@ class FizzbuzzResult(BaseModel):
     index: int
 
 def fizzbuzz_runner(size, f, b):
+    if f == b:
+        raise HTTPException(status_code = 400, detail = "The divisors must be different.")
     fb_instance = Fizzbuzz(size)
     multiplied = f * b
     for i in range(size):
